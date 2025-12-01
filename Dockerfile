@@ -4,14 +4,14 @@ FROM node:18-alpine AS builder
 WORKDIR /app
 
 # Install dependencies
-COPY package.json bun.lockb ./
-RUN npm install --global bun && bun install
+COPY package.json package-lock.json* ./
+RUN npm ci --prefer-offline --no-audit
 
 # Copy source code
 COPY . .
 
 # Build the application
-RUN bun run build
+RUN npm run build
 
 # Runtime stage
 FROM nginx:alpine

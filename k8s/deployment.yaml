@@ -40,8 +40,8 @@ spec:
         runAsUser: 101
       containers:
       - name: fortune-cookie
-        image: tashivxo/fortune-cookie:latest
-        imagePullPolicy: Always
+        image: fortune-cookie:latest
+        imagePullPolicy: Never
         ports:
         - containerPort: 80
           name: http

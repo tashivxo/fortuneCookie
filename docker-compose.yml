@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  fortune-cookie:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fortune-cookie-app
+    ports:
+      - "8080:80"
+    environment:
+      - VITE_SUPABASE_URL=${VITE_SUPABASE_URL:-}
+      - VITE_SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY:-}
+    volumes:
+      - ./dist:/usr/share/nginx/html:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+    networks:
+      - fortune-cookie-network
+    labels:
+      - "com.example.description=Fortune Cookie App"
+      - "com.example.version=1.0.0"
+
+  # Optional: Add services like databases, caches, APIs below
+  # postgres:
+  #   image: postgres:15-alpine
+  #   environment:
+  #     POSTGRES_DB: fortune_cookie
+  #     POSTGRES_PASSWORD: password
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   networks:
+  #     - fortune-cookie-network
+
+networks:
+  fortune-cookie-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
